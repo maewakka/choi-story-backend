@@ -1,0 +1,15 @@
+### JWT ###
+token_expired:
+  status: 401
+  message: 토큰이 만료 되었습니다.
+token_not_valid:
+  status: 401
+  message: 토큰이 유효하지 않습니다.
+
+### USER ###
+user_not_found:
+  status: 404
+  message: 해당 사용자를 찾을 수 없습니다.
+user_already_exist:
+  status: 409
+  message: 이미 가입된 유저입니다.
