@@ -44,7 +44,6 @@ public class OAuthAttributes {
         return oAuthAttributes;
     }
 
-    // 구글 생성자
     private static OAuthAttributes ofGoogle(String usernameAttributeName,
                                             Map<String, Object> attributes) {
         return OAuthAttributes.builder()
@@ -77,7 +76,7 @@ public class OAuthAttributes {
     // User 엔티티 생성
     public User toEntity() {
         return User.builder()
-                .id(id)
+                .userId(id)
                 .role(Role.USER)
                 .oAuth(OAuth.fromValue(registrationId))
                 .profileImgPath("profile_img/default_profile.png")

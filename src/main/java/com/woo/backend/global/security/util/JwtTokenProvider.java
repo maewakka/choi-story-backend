@@ -24,14 +24,14 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
 
 
-    public String generateAccessToken(String email) {
-        return generateToken(email, jwtProperties.getAccessTime());
+    public String generateAccessToken(String id) {
+        return generateToken(id, jwtProperties.getAccessTime());
     }
 
 
-    private String generateToken(String email, Long time) {
+    private String generateToken(String id, Long time) {
         Claims claims = Jwts.claims();
-        claims.put("email", email);
+        claims.put("id", id);
         Date now = new Date();
 
         return Jwts.builder()
@@ -63,7 +63,7 @@ public class JwtTokenProvider {
 
     private String parseToken(String bearerToken) {
         if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix()))
-            return bearerToken.replace(jwtProperties.getPrefix(), "");
+            return bearerToken.replace(jwtProperties.getPrefix(), "").trim();
         return null;
     }
 

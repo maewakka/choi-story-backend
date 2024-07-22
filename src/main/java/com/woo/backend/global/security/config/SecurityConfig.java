@@ -2,6 +2,9 @@ package com.woo.backend.global.security.config;
 
 import com.woo.backend.domain.user.util.CustomOAuth2LoginFailureHandler;
 import com.woo.backend.domain.user.util.CustomOAuth2LoginSuccessHandler;
+import com.woo.backend.global.security.filter.JwtFilter;
+import com.woo.backend.global.security.service.StoryUserDetailsService;
+import com.woo.backend.global.security.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +25,8 @@ public class SecurityConfig {
 
     private final CustomOAuth2LoginSuccessHandler successHandler;
     private final CustomOAuth2LoginFailureHandler failureHandler;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final StoryUserDetailsService storyUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,14 +34,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
                                 .successHandler(successHandler)
                                 .failureHandler(failureHandler)
-                );
-//                .addFilterBefore(new JwtFilter(guardianUserDetailsService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                )
+                .addFilterBefore(new JwtFilter(storyUserDetailsService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

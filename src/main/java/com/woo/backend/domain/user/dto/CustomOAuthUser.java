@@ -1,20 +1,29 @@
-package com.woo.backend.global.security.dto;
+package com.woo.backend.domain.user.dto;
 
 import com.woo.backend.domain.user.entity.User;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.jar.Attributes;
 
+@Builder
 @Getter
-@AllArgsConstructor
-public class StoryUserDetails implements UserDetails {
+public class CustomOAuthUser implements OAuth2User {
 
+    private Map<String, Object> attributes;
     private User user;
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -24,12 +33,7 @@ public class StoryUserDetails implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
+    public String getName() {
         return user.getUserId();
     }
 }

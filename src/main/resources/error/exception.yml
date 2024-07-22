@@ -6,6 +6,14 @@ token_not_valid:
   status: 401
   message: 토큰이 유효하지 않습니다.
 
+### MINIO ###
+minio_can_not_put:
+  status: 500
+  message: 미디어 파일을 저장할 수 없습니다.
+minio_can_not_get:
+  status: 404
+  message: 미디어 파일을 가져올 수 없습니다.
+
 ### USER ###
 user_not_found:
   status: 404

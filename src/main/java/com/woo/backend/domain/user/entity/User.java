@@ -15,7 +15,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @Column(unique = true)
-    private String id;
+    private String userId;
 
     @Column(unique = true)
     private String nickName;
@@ -28,8 +28,8 @@ public class User extends BaseTimeEntity {
     private OAuth oAuth;
 
     @Builder
-    public User(String id, String nickName, String profileImgPath, Role role, OAuth oAuth) {
-        this.id = id;
+    public User(String userId, String nickName, String profileImgPath, Role role, OAuth oAuth) {
+        this.userId = userId;
         this.nickName = nickName;
         this.profileImgPath = profileImgPath;
         this.role = role;

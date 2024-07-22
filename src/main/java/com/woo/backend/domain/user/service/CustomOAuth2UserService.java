@@ -1,5 +1,6 @@
 package com.woo.backend.domain.user.service;
 
+import com.woo.backend.domain.user.dto.CustomOAuthUser;
 import com.woo.backend.domain.user.dto.OAuthAttributes;
 import com.woo.backend.domain.user.entity.User;
 import com.woo.backend.domain.user.entity.repository.UserRepository;
@@ -41,14 +42,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 사용자 저장
         User user = saveUser(attributes);
 
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue())),
-                attributes.getAttributes(),
-                attributes.getAttributeName());
+        return CustomOAuthUser.builder()
+                .user(user)
+                .attributes(attributes.getAttributes())
+                .build();
     }
 
     private User saveUser(OAuthAttributes attributes) {
-        if(userRepository.existsById(attributes.getId())) return userRepository.findById(attributes.getId()).orElseThrow(() -> new BizException("user_not_found"));
+        if(userRepository.existsByUserId(attributes.getId())) return userRepository.findById(attributes.getId()).orElseThrow(() -> new BizException("user_not_found"));
 
         return userRepository.save(attributes.toEntity());
     }
