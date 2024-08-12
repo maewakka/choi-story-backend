@@ -7,7 +7,6 @@ import com.woo.backend.global.minio.util.MinioUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -17,9 +16,14 @@ public class GetUserService {
     private final UserRepository userRepository;
     private final MinioUtil minioUtil;
 
-    @Transactional(readOnly = true)
     public UserProfileResp getUserProfile(User user) {
-        log.info(user.toString());
         return UserProfileResp.of(user, minioUtil.getUrlFromMinioObject(user.getProfileImgPath()));
+    }
+
+    public Boolean getExistStatusByNickName(String nickName) {
+        if (nickName.length() < 3 || nickName.contains(" ")) {
+            return true;
+        }
+        return userRepository.existsByNickName(nickName);
     }
 }

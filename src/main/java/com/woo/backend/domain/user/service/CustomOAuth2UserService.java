@@ -4,19 +4,16 @@ import com.woo.backend.domain.user.dto.CustomOAuthUser;
 import com.woo.backend.domain.user.dto.OAuthAttributes;
 import com.woo.backend.domain.user.entity.User;
 import com.woo.backend.domain.user.entity.repository.UserRepository;
+import com.woo.backend.domain.user.enums.OAuth;
 import com.woo.exception.util.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -49,7 +46,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveUser(OAuthAttributes attributes) {
-        if(userRepository.existsByUserId(attributes.getId())) return userRepository.findById(attributes.getId()).orElseThrow(() -> new BizException("user_not_found"));
+        if(userRepository.existsById(attributes.getId())) {
+            return userRepository.findUserByUserId(attributes.getId()).orElseThrow(() -> new BizException("user_not_found"));
+        }
 
         return userRepository.save(attributes.toEntity());
     }

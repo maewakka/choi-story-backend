@@ -10,7 +10,6 @@ public class UserProfileResp {
 
     private String nickName;
     private String profileImgPath;
-    private String oAuth;
 
     public static UserProfileResp of(User user, String profileImgPath) {
         return UserProfileResp.builder()

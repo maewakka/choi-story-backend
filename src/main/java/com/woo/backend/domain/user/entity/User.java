@@ -35,4 +35,12 @@ public class User extends BaseTimeEntity {
         this.role = role;
         this.oAuth = oAuth;
     }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updateProfileImgPath(String profileImgPath) {
+        this.profileImgPath = profileImgPath;
+    }
 }
